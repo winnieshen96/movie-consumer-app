@@ -30,11 +30,12 @@ def index():
 def directorsearch():
     # director = Person.query.whoosh_search(request.form.get("director")).all()[0]
     search_name = request.form.get("director").strip()
-    print(search_name)
+    # print(search_name)
     c.execute('''SELECT name, person_id FROM PERSON WHERE name LIKE ?''', [search_name])
     director = c.fetchall()[0]
-    print(director)
-    directors.append(director)
+    # print(director)
+    if director not in directors:
+        directors.append(director)
     return render_template("index.html", directors=directors, writers=writers)
 
 
@@ -42,9 +43,11 @@ def directorsearch():
 def writersearch():
     # writer = Person.query.whoosh_search(request.form.get("writer")).all()[0]
     # TODO save the writer for later classify
-    search_name = request.form.get("writer")
-    director = c.execute('''SELECT name, person_id FROM PERSON WHERE name LIKE ?''', [search_name])[0]
-    writers.append(writer)
+    search_name = request.form.get("writer").strip()
+    c.execute('''SELECT name, person_id FROM PERSON WHERE name LIKE ?''', [search_name])
+    writer = c.fetchall()[0]
+    if writer not in writers:
+        writers.append(writer)
     return render_template("index.html", directors=directors, writers=writers)
 
 

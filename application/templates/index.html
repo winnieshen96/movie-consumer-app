@@ -21,24 +21,23 @@
             <td><h4>Directors:</h4></td>
             <td><input type="text" name="director"> </td>
             <td><input type="hidden" id="forminput" name="forminput"  >           
-                <p><input type="submit" value="search"></p></td>
-        </tr>
-        <tr>
-                {% for director in directors %}
-            <td><h4>{{director.0}}, {{director.1}}</h4></td>
-            {% endfor %}
+                <p><input type="submit" value="search and add"></p></td>
+            <td>{% for director in directors %}
+            <h4>{{director.0}}, {{director.1}}</h4>
+            {% endfor %}</td>
         </tr>
     </table>
 </form>
 <form name="writerform" id="writerform" action = "{{ url_for('writersearch') }}" method="POST">
     <table style="margin-left:auto;margin-right:auto;">
         <tr>
-            <td><h4>Writers:</h4></td>
+            <td><h4>Directors:</h4></td>
             <td><input type="text" name="writer"> </td>
-            
-            {% for writer in writers %}
-            <td><h4>{{writer.name}}</h4></td>
-            {% endfor %}
+            <td><input type="hidden" id="forminput" name="forminput"  >           
+                <p><input type="submit" value="search and add"></p></td>
+                <td>{% for writer in writers %}
+                    <h4>{{writer.0}}, {{writer.1}}</h4>
+                    {% endfor %}</td>
         </tr>
     </table>
 </form>
