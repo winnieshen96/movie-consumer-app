@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        body {
+          background-image: url('/static/images/cinema-screen.png');
+          /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        }
+        </style>
+<body>
+    <h1 style="text-align:center">Box Office Disaster Preventer</h1>
+    <!-- <br></br>
+    <p style="text-align:center"><label>Enter the plot below:</label></p>
+<p style="text-align:center"><textarea id="w3mission" rows="6" cols="100">
+</textarea></p> -->
+<form name="directorform" id="directorform" action = "{{ url_for('directorsearch') }}" method="POST">
+    <table style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td><h4>Directors:</h4></td>
+            <td><input type="text" name="director"> </td>
+            <td><input type="hidden" id="forminput" name="forminput"  >           
+                <p><input type="submit" value="search"></p></td>
+        </tr>
+        <tr>
+                {% for director in directors %}
+            <td><h4>{{director.0}}, {{director.1}}</h4></td>
+            {% endfor %}
+        </tr>
+    </table>
+</form>
+<form name="writerform" id="writerform" action = "{{ url_for('writersearch') }}" method="POST">
+    <table style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td><h4>Writers:</h4></td>
+            <td><input type="text" name="writer"> </td>
+            
+            {% for writer in writers %}
+            <td><h4>{{writer.name}}</h4></td>
+            {% endfor %}
+        </tr>
+    </table>
+</form>
+<form name="movieform" id="movieform" action = "{{ url_for('movieclassify') }}" method="POST">
+    <p style="text-align:center"><label>Enter the plot below:</label></p>
+    <p style="text-align:center"><textarea name="plot" rows="6" cols="100"></textarea></p>
+    <input type="hidden" id="forminput" name="forminput"  >           
+    <p style="text-align:center"><input type="submit" value="Classify"></p>     
+        {% if results  == '0' %}
+            <h4>This project is okay</h4>
+            <!-- <img src="static/images/Iris_setosa.jpg">            -->
+        {% elif results == '1' %}
+            <h4>Beware! This project might have low return!</h4>
+            <!-- <img src="static/images/Iris_versicolor.jpg">                 -->
+        {% endif %}
+    <br></br>
+</form>
+</body>
+
+</html>
