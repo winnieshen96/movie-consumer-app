@@ -16,14 +16,20 @@ app = Flask(__name__)
 conn = sqlite3.connect('person.db', check_same_thread=False)
 c = conn.cursor()
 
-
 directors = []
 writers = []
+# TODO change it to read from csv file
+genres_to_select = ['isAdult', 'Action',
+       'Adventure', 'Drama', 'Fantasy', 'Sci-Fi', 'Thriller', 'Animation',
+       'Comedy', 'Family', 'Crime', 'Horror', 'History', 'Romance', 'Mystery',
+       'Musical', 'Documentary', 'Adult', 'War', 'Biography', 'Western',
+       'Sport', 'Music', 'News', 'Film-Noir']
+genres = []
 
 @app.route("/")
 @app.route("/index")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", genres_to_select=genres_to_select)
 
 
 @app.route('/directorsearch', methods=['GET', 'POST'])
@@ -48,6 +54,12 @@ def writersearch():
     writer = c.fetchall()[0]
     if writer not in writers:
         writers.append(writer)
+    return render_template("index.html", directors=directors, writers=writers)
+
+@app.route('/genreselect', methods=['GET', 'POST'])
+def genreselect():
+    genres = request.form.getlist('mymultiselect')
+    print(genres)
     return render_template("index.html", directors=directors, writers=writers)
 
 

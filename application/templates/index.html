@@ -36,7 +36,15 @@
             </form>
         </td>
         <td rowspan="2">
-
+            <form name="genreform" id="genreform" action="{{ url_for('writersearch') }}">
+                <label for="genres">Choose genre(s):</label>
+                <select id="genres" name="genres" multiple>
+                    {% for genre in genres_to_select %}
+                  <option value={{genre}}>{{genre}}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit">
+                </form>
         </td>
     </tr>
     <tr>
