@@ -31,7 +31,7 @@ def directorsearch():
     # director = Person.query.whoosh_search(request.form.get("director")).all()[0]
     search_name = request.form.get("director").strip()
     # print(search_name)
-    c.execute('''SELECT name, person_id FROM PERSON WHERE name LIKE ?''', [search_name])
+    c.execute('''SELECT name, person_id, roi FROM PERSON WHERE name LIKE ?''', [search_name])
     director = c.fetchall()[0]
     # print(director)
     if director not in directors:
@@ -44,7 +44,7 @@ def writersearch():
     # writer = Person.query.whoosh_search(request.form.get("writer")).all()[0]
     # TODO save the writer for later classify
     search_name = request.form.get("writer").strip()
-    c.execute('''SELECT name, person_id FROM PERSON WHERE name LIKE ?''', [search_name])
+    c.execute('''SELECT name, person_id, roi FROM PERSON WHERE name LIKE ?''', [search_name])
     writer = c.fetchall()[0]
     if writer not in writers:
         writers.append(writer)
