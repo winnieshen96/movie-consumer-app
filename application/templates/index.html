@@ -15,42 +15,53 @@
     <p style="text-align:center"><label>Enter the plot below:</label></p>
 <p style="text-align:center"><textarea id="w3mission" rows="6" cols="100">
 </textarea></p> -->
-<form name="directorform" id="directorform" action = "{{ url_for('directorsearch') }}" method="POST">
-    <table style="margin-left:auto;margin-right:auto;">
-        <tr>
-            <td><h4>Directors:</h4></td>
-            <td><input type="text" name="director"> </td>
-            <td><input type="hidden" id="forminput" name="forminput"  >           
-                <p><input type="submit" value="search and add"></p></td>
-        </tr>
-    </table>
-</form>
+
+<!-- new -->
 <table style="margin-left:auto;margin-right:auto;">
     <tr>
-        <td><h4>Added Directors:</h4></td>
-        <td>{% for director in directors %}
-            <h4>{{director.0}}, {{director.1}}</h4>
-            {% endfor %}</td>
+        <td>
+            <form name="directorform" id="directorform" action = "{{ url_for('directorsearch') }}" method="POST">
+                <h4>Directors:</h4>
+                <input type="text" name="director">
+                <input type="hidden" id="forminput" name="forminput"  >           
+                <p><input type="submit" value="search and add"></p>
+            </form>
+        </td>
+        <td>
+            <form name="writerform" id="writerform" action = "{{ url_for('writersearch') }}" method="POST">
+                <h4>Writers:</h4>
+                <input type="text" name="writer">
+                <input type="hidden" id="forminput" name="forminput"  >           
+                <p><input type="submit" value="search and add"></p>
+            </form>
+        </td>
+        <td rowspan="2">
+
+        </td>
     </tr>
-</table>
-<form name="writerform" id="writerform" action = "{{ url_for('writersearch') }}" method="POST">
-    <table style="margin-left:auto;margin-right:auto;">
-        <tr>
-            <td><h4>Writers:</h4></td>
-            <td><input type="text" name="writer"> </td>
-            <td><input type="hidden" id="forminput" name="forminput"  >           
-                <p><input type="submit" value="search and add"></p></td>
-        </tr>
-    </table>
-</form>
-<table style="margin-left:auto;margin-right:auto;">
     <tr>
-        <td><h4>Added Writers:</h4></td>
-        <td>{% for writer in writers %}
-            <h4>{{writer.0}}, {{writer.1}}</h4>
-            {% endfor %}</td>
+        <td>
+            <h4>Added Directors:</h4>
+        </td>
+        <td>
+            <h4>Added Writers:</h4>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {% for director in directors %}
+            <label>{{director.0}}, {{director.1}}</label>
+            {% endfor %}
+        </td>
+        <td>
+            {% for writer in writers %}
+            <label>{{writer.0}}, {{writer.1}}</label>
+            {% endfor %}
+        </td>
     </tr>
 </table>
+
+
 <h2 style="text-align:center">Description</h2>
 <p style="text-align:center">Click the 'Classify' button below 
                         <br>to get a prediction of return on investment prediction
