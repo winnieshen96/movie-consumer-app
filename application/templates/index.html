@@ -41,9 +41,10 @@
         </tr>
     </table>
 </form>
-<form name="movieform" id="movieform" action = "{{ url_for('movieclassify') }}" method="POST">
-    <p style="text-align:center"><label>Enter the plot below:</label></p>
-    <p style="text-align:center"><textarea name="plot" rows="6" cols="100"></textarea></p>
+<form name="movieform" id="movieform" action = "{{ url_for('roiclassify') }}" method="POST">
+    <p style="text-align:center"><label>Click the 'Classify' button below to get a prediction of return on investment prediction based on the historic performance of inputted directors and writers.</label></p>
+    <!-- <p style="text-align:center"><label>Enter the plot below:</label></p>
+    <p style="text-align:center"><textarea name="plot" rows="6" cols="100"></textarea></p> -->
     <input type="hidden" id="forminput" name="forminput"  >           
     <p style="text-align:center"><input type="submit" value="Classify"></p>     
         {% if results  == '0' %}

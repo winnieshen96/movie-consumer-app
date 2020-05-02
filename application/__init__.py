@@ -51,24 +51,25 @@ def writersearch():
     return render_template("index.html", directors=directors, writers=writers)
 
 
-@app.route("/movieclassify", methods=['GET', 'POST'])
-def movieclassify():
+@app.route("/roiclassify", methods=['GET', 'POST'])
+def roiclassify():
 
-    # extract form inputs 
-    plot = request.form.get("plot")
+    # TODO incoming plot prediction feature extract form inputs
+    # plot = request.form.get("plot")
     
     #url for irisservice
     #url = "http://localhost:5000/api"
     url = "https://irismodel-app.herokuapp.com/api"
 
     #create json from form inputs
-    data = json.dumps({"plot": plot, "director": directors, "writer": writers})
+    # data = json.dumps({"plot": plot, "director": directors, "writer": writers})
+    data = json.dumps({"director": directors, "writer": writers})
 
     #post json to url
     results =  requests.post(url,data)
     
     #send features and prediction result to index.html for display
-    return render_template("index.html", plot = plot, director = director, writer = writer, results=results.content.decode('UTF-8'))
+    return render_template("index.html", plot = plot, directors=directors, writers=writers, results=results.content.decode('UTF-8'))
 
 
 # # database models
