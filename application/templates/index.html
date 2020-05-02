@@ -35,8 +35,9 @@
                 <p><input type="submit" value="search and add"></p>
             </form>
         </td>
-        <td rowspan="2">
-            <form name="genreform" id="genreform" action="{{ url_for('writersearch') }}">
+        <td>
+            <h4>Genres:</h4>
+            <form name="genreform" id="genreform" action="{{ url_for('genreselect') }}" method="POST">
                 <label for="genres">Choose genre(s):</label>
                 <select id="genres" name="genres" multiple>
                     {% for genre in genres_to_select %}
@@ -54,6 +55,9 @@
         <td>
             <h4>Added Writers:</h4>
         </td>
+        <td>
+            <h4>Added Genres:</h4>
+        </td>
     </tr>
     <tr>
         <td>
@@ -66,6 +70,11 @@
             <label>{{writer.0}}, {{writer.1}}</label>
             {% endfor %}
         </td>
+        <td>
+            {% for genre in genres %}
+            <label>{{genre}}</label>
+            {% endfor %}
+        </td>
     </tr>
 </table>
 
@@ -73,7 +82,8 @@
 <h2 style="text-align:center">Description</h2>
 <p style="text-align:center">Click the 'Classify' button below 
                         <br>to get a prediction of return on investment prediction
-                        <br>based on the historic performance of inputted directors and writers.</p>
+                        <br>based on your selected genre the historic performance 
+                        <br>of inputted directors and writers.</p>
 <form name="movieform" id="movieform" action = "{{ url_for('roiclassify') }}" method="POST">
     <!-- <p style="text-align:center"><label>Enter the plot below:</label></p>
     <p style="text-align:center"><textarea name="plot" rows="6" cols="100"></textarea></p> -->
