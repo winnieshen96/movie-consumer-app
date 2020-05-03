@@ -86,8 +86,8 @@ def roiclassify():
     # plot = request.form.get("plot")
     
     #url for irisservice
-    url = "http://localhost:5001/api"
-    # url = "https://irismodel-app.herokuapp.com/api"
+    # url = "http://localhost:5001/api"
+    url = "https://movie-model-app.herokuapp.com/api"
 
     # create json from form inputs
     data = json.dumps({"director": session.get('directors', None), "writer": session.get('writers', None), "genres": session.get('genres', None)})
