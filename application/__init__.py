@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, json
+from flask import Flask, render_template, request, json, session
 # from flask_sqlalchemy import SQLAlchemy
 # from sqlalchemy import Column, Integer, String, Float
 # import flask_whooshalchemy as wa
@@ -7,14 +7,12 @@ import os
 import requests
 
 app = Flask(__name__)
+app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 # basedir = os.path.abspath(os.path.dirname(__file__))
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'person.db')
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
 # app.config['WHOOSH_BASE'] = 'whoosh'
 
-directors = []
-writers = []
-genres = []
 # TODO change it to read from csv file
 genres_to_select = ['isAdult', 'Action',
        'Adventure', 'Drama', 'Fantasy', 'Sci-Fi', 'Thriller', 'Animation',
@@ -25,8 +23,10 @@ genres_to_select = ['isAdult', 'Action',
 @app.route("/")
 @app.route("/index")
 def index():
+    session['directors'] = []
+    session['writers'] = []
+    session['genres'] = []
     return render_template("index.html", genres_to_select=genres_to_select)
-
 
 @app.route('/directorsearch', methods=['GET', 'POST'])
 def directorsearch():
@@ -39,10 +39,11 @@ def directorsearch():
     c.execute('''SELECT name, person_id, roi FROM PERSON WHERE name LIKE ?''', [search_name])
     director = c.fetchall()[0]
     # print(director)
+    directors = session.get('directors', None)
     if director not in directors:
         directors.append(director)
-    return render_template("index.html", directors=directors, writers=writers, genres_to_select=genres_to_select, genres=genres)
-
+    session['directors'] = directors
+    return render_template("index.html", directors=session.get('directors', None), writers=session.get('writers', None), genres_to_select=genres_to_select, genres=session.get('genres', None))
 
 @app.route('/writersearch', methods=['GET', 'POST'])
 def writersearch():
@@ -54,18 +55,29 @@ def writersearch():
     search_name = request.form.get("writer").strip()
     c.execute('''SELECT name, person_id, roi FROM PERSON WHERE name LIKE ?''', [search_name])
     writer = c.fetchall()[0]
+    writers = session.get('writers', None)
     if writer not in writers:
         writers.append(writer)
-    return render_template("index.html", directors=directors, writers=writers, genres_to_select=genres_to_select, genres=genres)
+    session['writers'] = writers
+    return render_template("index.html", directors=session.get('directors', None), writers=session.get('writers', None), genres_to_select=genres_to_select, genres=session.get('genres', None))
 
 @app.route('/genreselect', methods=['GET', 'POST'])
 def genreselect():
     genres_selected = request.form.getlist('genres')
+    genres = session.get('genres', None)
     for genre in genres_selected:
         if genre not in genres:
             genres.append(genre)
-    return render_template("index.html", directors=directors, writers=writers, genres_to_select=genres_to_select, genres=genres)
+    session['genres'] = genres
+    return render_template("index.html", directors=session.get('directors', None), writers=session.get('writers', None), genres_to_select=genres_to_select, genres=session.get('genres', None))
 
+@app.route('/reset', methods=['GET', 'POST'])
+def reset():
+    session.clear()
+    session['directors'] = []
+    session['writers'] = []
+    session['genres'] = []
+    return render_template("index.html", genres_to_select=genres_to_select)
 
 @app.route("/roiclassify", methods=['GET', 'POST'])
 def roiclassify():
@@ -78,7 +90,7 @@ def roiclassify():
     # url = "https://irismodel-app.herokuapp.com/api"
 
     # create json from form inputs
-    data = json.dumps({"director": directors, "writer": writers, "genres": genres})
+    data = json.dumps({"director": session.get('directors', None), "writer": session.get('writers', None), "genres": session.get('genres', None)})
 
     # post json to url
     results =  requests.post(url,data)
@@ -90,7 +102,7 @@ def roiclassify():
         scores[score] = round(float(results['scores'][score]), 3)*100
 
     #send features and prediction result to index.html for display
-    return render_template("index.html", directors=directors, writers=writers, genres=genres, genres_to_select=genres_to_select, prediction=prediction, scores=scores)
+    return render_template("index.html", directors=session.get('directors', None), writers=session.get('writers', None), genres=session.get('genres', None), genres_to_select=genres_to_select, prediction=prediction, scores=scores)
 
 
 # # database models
