@@ -8,6 +8,12 @@
         background-repeat: no-repeat;
         background-size: cover;
         }
+        div.transbox {
+            margin: 30px;
+            background-color: #ffffff;
+            border: 1px solid black;
+            opacity: 0.8;
+}
         </style>
 <body>
     <h1 style="text-align:center">Box Office Disaster Preventer</h1>
@@ -89,13 +95,17 @@
     <p style="text-align:center"><textarea name="plot" rows="6" cols="100"></textarea></p> -->
     <input type="hidden" id="forminput" name="forminput"  >           
     <p style="text-align:center"><input type="submit" value="Classify"></p>     
-        {% if results  == '0' %}
-            <h4>This project is okay</h4>
-            <!-- <img src="static/images/Iris_setosa.jpg">            -->
-        {% elif results == '1' %}
-            <h4>Beware! This project might have low return!</h4>
-            <!-- <img src="static/images/Iris_versicolor.jpg">                 -->
+    <div class="transbox">
+        {% if prediction  == 0 %}
+            <h4 style="text-align:center">This project is okay</h4>
+        {% elif prediction == 1 %}
+            <h4 style="text-align:center">Beware! This project might have low return!</h4>
+            <p style="text-align:center">When our model say a project will have low return, 
+                                    <br> there is {{scores.precision}}% chance that it is right.</p>
+            <p style="text-align:center"; background-color: white;>When a project will have low return, 
+                                    <br> there is {{scores.recall}}% chance that our model can identify it.</p>
         {% endif %}
+    </div>    
     <br></br>
 </form>
 </body>

@@ -12,19 +12,15 @@ app = Flask(__name__)
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
 # app.config['WHOOSH_BASE'] = 'whoosh'
 
-# db = SQLAlchemy(app)
-conn = sqlite3.connect('person.db', check_same_thread=False)
-c = conn.cursor()
-
 directors = []
 writers = []
+genres = []
 # TODO change it to read from csv file
 genres_to_select = ['isAdult', 'Action',
        'Adventure', 'Drama', 'Fantasy', 'Sci-Fi', 'Thriller', 'Animation',
        'Comedy', 'Family', 'Crime', 'Horror', 'History', 'Romance', 'Mystery',
        'Musical', 'Documentary', 'Adult', 'War', 'Biography', 'Western',
        'Sport', 'Music', 'News', 'Film-Noir']
-genres = []
 
 @app.route("/")
 @app.route("/index")
@@ -34,6 +30,9 @@ def index():
 
 @app.route('/directorsearch', methods=['GET', 'POST'])
 def directorsearch():
+    # db = SQLAlchemy(app)
+    conn = sqlite3.connect('person.db', check_same_thread=False)
+    c = conn.cursor()
     # director = Person.query.whoosh_search(request.form.get("director")).all()[0]
     search_name = request.form.get("director").strip()
     # print(search_name)
@@ -49,6 +48,9 @@ def directorsearch():
 def writersearch():
     # writer = Person.query.whoosh_search(request.form.get("writer")).all()[0]
     # TODO save the writer for later classify
+    # db = SQLAlchemy(app)
+    conn = sqlite3.connect('person.db', check_same_thread=False)
+    c = conn.cursor()
     search_name = request.form.get("writer").strip()
     c.execute('''SELECT name, person_id, roi FROM PERSON WHERE name LIKE ?''', [search_name])
     writer = c.fetchall()[0]
@@ -72,18 +74,23 @@ def roiclassify():
     # plot = request.form.get("plot")
     
     #url for irisservice
-    #url = "http://localhost:5000/api"
-    url = "https://irismodel-app.herokuapp.com/api"
+    url = "http://localhost:5001/api"
+    # url = "https://irismodel-app.herokuapp.com/api"
 
-    #create json from form inputs
-    # data = json.dumps({"plot": plot, "director": directors, "writer": writers})
-    data = json.dumps({"director": directors, "writer": writers})
+    # create json from form inputs
+    data = json.dumps({"director": directors, "writer": writers, "genres": genres})
 
-    #post json to url
+    # post json to url
     results =  requests.post(url,data)
-    
+    results.encoding = results.apparent_encoding
+    results = json.loads(results.text)
+    prediction = results['prediction']
+    scores = {}
+    for score in results['scores']:
+        scores[score] = round(float(results['scores'][score]), 3)*100
+
     #send features and prediction result to index.html for display
-    return render_template("index.html", plot = plot, directors=directors, writers=writers, results=results.content.decode('UTF-8'))
+    return render_template("index.html", directors=directors, writers=writers, genres=genres, genres_to_select=genres_to_select, prediction=prediction, scores=scores)
 
 
 # # database models
