@@ -85,9 +85,20 @@ def roiclassify():
     # TODO incoming plot prediction feature extract form inputs
     # plot = request.form.get("plot")
     
+    # select low_performed people
+    threshold = 2
+    low_performed = []
+    directors = session.get('directors', None)
+    writers = session.get('writers', None)
+    for person in directors:
+        if person[2] < threshold:
+            low_performed.append(person)
+    for person in writers:
+        if person[2] < threshold:
+            low_performed.append(person)
     #url for irisservice
-    # url = "http://localhost:5001/api"
-    url = "https://movie-model-app.herokuapp.com/api"
+    url = "http://localhost:5001/api"
+    # url = "https://movie-model-app.herokuapp.com/api"
 
     # create json from form inputs
     data = json.dumps({"director": session.get('directors', None), "writer": session.get('writers', None), "genres": session.get('genres', None)})
@@ -102,7 +113,7 @@ def roiclassify():
         scores[score] = round(float(results['scores'][score]), 3)*100
 
     #send features and prediction result to index.html for display
-    return render_template("index.html", directors=session.get('directors', None), writers=session.get('writers', None), genres=session.get('genres', None), genres_to_select=genres_to_select, prediction=prediction, scores=scores)
+    return render_template("index.html", directors=session.get('directors', None), writers=session.get('writers', None), genres=session.get('genres', None), genres_to_select=genres_to_select, prediction=prediction, scores=scores, low_performed=low_performed)
 
 
 # # database models

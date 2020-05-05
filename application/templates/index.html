@@ -68,12 +68,12 @@
     <tr>
         <td>
             {% for director in directors %}
-            <label>{{director.0}}, {{director.1}}</label>
+            <label>{{director.1}}</label>
             {% endfor %}
         </td>
         <td>
             {% for writer in writers %}
-            <label>{{writer.0}}, {{writer.1}}</label>
+            <label>{{writer.1}}</label>
             {% endfor %}
         </td>
         <td>
@@ -103,6 +103,11 @@
             <h4 style="text-align:center">This project is okay</h4>
         {% elif prediction == 1 %}
             <h4 style="text-align:center">Beware! This project might have low return!</h4>
+            <p style="text-align:center">The following people have low average ROI in their career, be sure to 
+            carefully interview about their plan.</p>
+            {% for person in low_performed %}
+            <p style="text-align:center">{{person.0}}</p>
+            {% endfor %}
             <p style="text-align:center">When our model say a project will have low return, 
                                     <br> there is {{scores.precision}}% chance that it is right.</p>
             <p style="text-align:center"; background-color: white;>When a project will have low return, 
