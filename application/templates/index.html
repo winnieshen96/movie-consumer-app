@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <style>
-        body {
-          background-image: url('/static/images/cinema-screen.png');
-          /* Center and scale the image nicely */
-        background-position: center;
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+<style>
+    /* body {
+        background-image: url('/static/images/cinema-screen.png'); */
+        /* Center and scale the image nicely */
+        /* background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        }
-        div.transbox {
-            margin: 30px;
-            background-color: #ffffff;
-            border: 1px solid black;
-            opacity: 0.8;
-}
-        </style>
+    } */
+
+    div.transbox {
+        margin: 30px;
+        background-color: #ffffff;
+        border: 1px solid black;
+        opacity: 0.8;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 10%;
+        height: 10%;
+    }
+</style>
+
 <body>
     <h1 style="text-align:center">Box Office Disaster Preventer</h1>
     <!-- <br></br>
@@ -22,100 +36,106 @@
 <p style="text-align:center"><textarea id="w3mission" rows="6" cols="100">
 </textarea></p> -->
 
-<!-- new -->
-<table style="margin-left:auto;margin-right:auto;">
-    <tr>
-        <td>
-            <form name="directorform" id="directorform" action = "{{ url_for('directorsearch') }}" method="POST">
-                <h4>Directors:</h4>
-                <input type="text" name="director">
-                <input type="hidden" id="forminput" name="forminput"  >           
-                <p><input type="submit" value="search and add"></p>
-            </form>
-        </td>
-        <td>
-            <form name="writerform" id="writerform" action = "{{ url_for('writersearch') }}" method="POST">
-                <h4>Writers:</h4>
-                <input type="text" name="writer">
-                <input type="hidden" id="forminput" name="forminput"  >           
-                <p><input type="submit" value="search and add"></p>
-            </form>
-        </td>
-        <td>
-            <h4>Genres:</h4>
-            <form name="genreform" id="genreform" action="{{ url_for('genreselect') }}" method="POST">
-                <label for="genres">Choose genre(s):</label>
-                <select id="genres" name="genres" multiple>
-                    {% for genre in genres_to_select %}
-                  <option value={{genre}}>{{genre}}</option>
-                    {% endfor %}
-                </select>
-                <input type="submit">
+    <!-- new -->
+    <table style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td>
+                <form name="directorform" id="directorform" action="{{ url_for('directorsearch') }}" method="POST">
+                    <h4>Directors:</h4>
+                    <input type="text" name="director">
+                    <input type="hidden" id="forminput" name="forminput">
+                    <p><input type="submit" value="search and add"></p>
                 </form>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h4>Added Directors:</h4>
-        </td>
-        <td>
-            <h4>Added Writers:</h4>
-        </td>
-        <td>
-            <h4>Added Genres:</h4>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {% for director in directors %}
-            <label>{{director.0}}</label>
-            {% endfor %}
-        </td>
-        <td>
-            {% for writer in writers %}
-            <label>{{writer.0}}</label>
-            {% endfor %}
-        </td>
-        <td>
-            {% for genre in genres %}
-            <label>{{genre}}</label>
-            {% endfor %}
-        </td>
-    </tr>
-</table>
+            </td>
+            <td>
+                <form name="writerform" id="writerform" action="{{ url_for('writersearch') }}" method="POST">
+                    <h4>Writers:</h4>
+                    <input type="text" name="writer">
+                    <input type="hidden" id="forminput" name="forminput">
+                    <p><input type="submit" value="search and add"></p>
+                </form>
+            </td>
+            <td>
+                <h4>Genres:</h4>
+                <form name="genreform" id="genreform" action="{{ url_for('genreselect') }}" method="POST">
+                    <label for="genres">Choose genre(s):</label>
+                    <select id="genres" name="genres" multiple>
+                        {% for genre in genres_to_select %}
+                        <option value={{genre}}>{{genre}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4>Added Directors:</h4>
+            </td>
+            <td>
+                <h4>Added Writers:</h4>
+            </td>
+            <td>
+                <h4>Added Genres:</h4>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% for director in directors %}
+                <label>{{director.0}}</label>
+                {% endfor %}
+            </td>
+            <td>
+                {% for writer in writers %}
+                <label>{{writer.0}}</label>
+                {% endfor %}
+            </td>
+            <td>
+                {% for genre in genres %}
+                <label>{{genre}}</label>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
 
-<form name="resetform" id="resetform" action="{{ url_for('reset') }}" method="POST">
-    <p style="text-align:center"><input type="submit" value="Reset"></p> 
-</form>
+    <form name="resetform" id="resetform" action="{{ url_for('reset') }}" method="POST">
+        <p style="text-align:center"><input type="submit" value="Reset"></p>
+    </form>
 
-<h2 style="text-align:center">Description</h2>
-<p style="text-align:center">Click the 'Classify' button below 
-                        <br>to get a prediction of return on investment prediction
-                        <br>based on your selected genre the historic performance 
-                        <br>of inputted directors and writers.</p>
-<form name="movieform" id="movieform" action = "{{ url_for('roiclassify') }}" method="POST">
-    <!-- <p style="text-align:center"><label>Enter the plot below:</label></p>
+    <h2 style="text-align:center">Description</h2>
+    <p style="text-align:center">Click the 'Classify' button below
+        <br>to get a prediction of return on investment prediction
+        <br>based on your selected genre the historic performance
+        <br>of inputted directors and writers.</p>
+    <form name="movieform" id="movieform" action="{{ url_for('roiclassify') }}" method="POST">
+        <!-- <p style="text-align:center"><label>Enter the plot below:</label></p>
     <p style="text-align:center"><textarea name="plot" rows="6" cols="100"></textarea></p> -->
-    <input type="hidden" id="forminput" name="forminput"  >           
-    <p style="text-align:center"><input type="submit" value="Classify"></p>     
-    <div class="transbox">
-        {% if prediction  == 0 %}
+        <input type="hidden" id="forminput" name="forminput">
+        <p style="text-align:center"><input type="submit" value="Classify"></p>
+        <div class="transbox">
+            {% if prediction  == 0 %}
             <h4 style="text-align:center">This project is okay</h4>
-        {% elif prediction == 1 %}
+            {% elif prediction == 1 %}
             <h4 style="text-align:center">Beware! This project might have low return!</h4>
-            <p style="text-align:center">The following people have low average ROI in their career, be sure to 
-            carefully interview about their plan.</p>
+            <p style="text-align:center">The following people have low average ROI in their career, be sure to
+                carefully interview about their plan.</p>
             {% for person in low_performed %}
             <p style="text-align:center">{{person.0}}</p>
             {% endfor %}
-            <p style="text-align:center">When our model say a project will have low return, 
-                                    <br> there is {{scores.precision}}% chance that it is right.</p>
-            <p style="text-align:center"; background-color: white;>When a project will have low return, 
-                                    <br> there is {{scores.recall}}% chance that our model can identify it.</p>
-        {% endif %}
-    </div>    
-    <br></br>
-</form>
+            <p style="text-align:center">When our model say a project will have low return,
+                <br> there is {{scores.precision}}% chance that it is right.</p>
+            <p style="text-align:center" ; background-color: white;>When a project will have low return,
+                <br> there is {{scores.recall}}% chance that our model can identify it.</p>
+            {% endif %}
+        </div>
+        <br></br>
+    </form>
+    <p style="text-align:center">Click the following icon to submit issues:</p>
+    <a href="https://github.com/users/winnieshen96/projects/3">
+        <img alt="Qries" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width=70"
+            height="70" class="center">
+    </a>
+
 </body>
 
 </html>
